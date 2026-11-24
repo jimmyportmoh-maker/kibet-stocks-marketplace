@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#fff7f5">
+  <title>Kibet Stocks — Kenyan farm products</title>
+  <style>
+    :root{--red:#c52f3b;--red-dark:#982432;--red-pale:#fff0ef;--green:#28794d;--green-pale:#eaf4ec;--blue:#2874bd;--ink:#252c30;--muted:#758087;--line:#e9e7e5;--paper:#fff;--bg:#fff9f7;--shadow:0 12px 35px #77302812}
+    *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;color:var(--ink);background:var(--bg);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+    .wrap{max-width:1320px;margin:auto;padding:0 5%}.top{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:5}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}.mark{width:39px;height:39px;border-radius:13px;background:var(--red);color:white;display:grid;place-items:center;font-size:20px}.brand strong{display:block;letter-spacing:.3px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:1.2px}
+    nav{display:flex;gap:5px}nav button,.nav-link{border:0;background:transparent;color:#536067;padding:10px;border-radius:8px;font-size:13px;font-weight:650;text-decoration:none}nav button:hover,.nav-link:hover{background:var(--red-pale);color:var(--red-dark)}
+    .actions{display:flex;gap:8px;align-items:center}.btn{border:0;background:var(--red);color:#fff;font-weight:700;padding:10px 14px;border-radius:9px}.btn:hover{background:var(--red-dark)}.btn-light{background:#fff;color:var(--red-dark);border:1px solid #e8c9c8}.btn-light:hover{background:var(--red-pale)}.btn-green{background:var(--green)}.btn-small{font-size:12px;padding:8px 10px}.cart-count{background:white;color:var(--red);border-radius:20px;padding:1px 6px;margin-left:4px;font-size:11px}
+    main{padding:27px 0 55px}.hero{background:linear-gradient(112deg,#9d2432,#c52f3b 55%,#e45d53);color:white;min-height:258px;border-radius:22px;padding:40px 45px;display:flex;justify-content:space-between;align-items:center;overflow:hidden;position:relative;box-shadow:var(--shadow)}.hero:after{content:"";position:absolute;width:300px;height:300px;border:1px solid #ffffff44;border-radius:50%;right:15%;top:-120px;box-shadow:0 0 0 35px #ffffff12,0 0 0 70px #ffffff0b}
+    .hero-text{max-width:620px;position:relative;z-index:1}.eyebrow{text-transform:uppercase;letter-spacing:1.6px;font-size:10px;font-weight:800;opacity:.82}.hero h1{font-size:clamp(32px,4.5vw,47px);line-height:1.08;letter-spacing:-1.6px;margin:12px 0}.hero p{color:#ffe7e4;max-width:520px;margin:0 0 20px}.hero .btn{background:white;color:var(--red-dark)}.hero-art{z-index:1;font-size:110px;margin-right:8%;filter:drop-shadow(0 13px 15px #63132055)}
+    .title-row{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:28px 0 15px}.title-row h2{font-size:20px;margin:0}.title-row p{font-size:12px;color:var(--muted);margin:4px 0 0}.search-row{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-bottom:16px}.search{height:42px;display:flex;align-items:center;gap:8px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:white;max-width:380px;flex:1}.search input{border:0;outline:0;width:100%;background:transparent}.filters{display:flex;gap:7px;overflow:auto}.filter{white-space:nowrap;border:1px solid var(--line);background:#fff;color:#5d676c;border-radius:20px;padding:7px 12px;font-size:11px;font-weight:700}.filter.active{background:var(--red-pale);border-color:#e8a5a7;color:var(--red-dark)}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.card{background:white;border:1px solid var(--line);border-radius:15px;overflow:hidden;transition:.18s}.card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.photo{height:172px;display:grid;place-items:center;position:relative;background:var(--green-pale);overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover}.emoji{font-size:66px}.tag{position:absolute;top:12px;left:12px;background:#fff;color:var(--red-dark);padding:4px 9px;border-radius:20px;font-size:10px;font-weight:800}.card-body{padding:14px}.product-head{display:flex;justify-content:space-between;align-items:start;gap:8px}.product-head h3{margin:0;font-size:15px}.stock{font-size:10px;color:var(--green);font-weight:750;white-space:nowrap}.seller{font-size:11px;color:var(--muted);margin:5px 0 9px}.desc{font-size:12px;color:#667177;min-height:36px;margin:0}.card-foot{border-top:1px solid #f1efed;margin-top:12px;padding-top:11px;display:flex;justify-content:space-between;align-items:center;gap:8px}.price{font-weight:850;font-size:14px}.price small{font-size:10px;color:var(--muted);font-weight:500}.card-actions{display:flex;gap:6px}
+    .empty{display:none;background:white;text-align:center;padding:30px;color:var(--muted);border:1px solid var(--line);border-radius:12px}.notice{margin-top:19px;background:#fff2e4;color:#795526;padding:12px 14px;border-radius:10px;font-size:11px}
+    .page{display:none}.page.active{display:block}.page-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 19px}.page-title h1{font-size:27px;margin:0}.page-title p{font-size:12px;color:var(--muted);margin:4px 0 0}.panel{padding:18px;background:white;border:1px solid var(--line);border-radius:14px;margin:12px 0}.panel h2{font-size:16px;margin:0 0 3px}.panel>p{font-size:11px;color:var(--muted);margin:0 0 14px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding:12px 0}.row:first-child{border-top:0}.row strong{display:block;font-size:12px}.row small{display:block;color:var(--muted);font-size:10px}.row input{width:85px}.status{border-radius:20px;background:#fff2dc;color:#8b6116;padding:4px 8px;font-size:10px;font-weight:750;white-space:nowrap}.status.paid{background:var(--green-pale);color:var(--green)}
+    .backdrop{display:none;position:fixed;inset:0;z-index:10;background:#24191ab0;backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:16px}.backdrop.open{display:flex}#authModal.open{z-index:12}.modal{width:min(100%,590px);max-height:92vh;overflow:auto;background:white;border-radius:17px;padding:21px;box-shadow:0 25px 80px #301b1b50}.modal.wide{width:min(100%,720px)}.modal-head{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:15px}.modal-head h2{font-size:19px;margin:0}.modal-head p{font-size:11px;color:var(--muted);margin:3px 0}.close{border:0;background:#f4eeee;border-radius:50%;width:30px;height:30px;font-size:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:4px;margin-bottom:10px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#59646a;font-weight:750}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #dedcda;border-radius:8px;outline:0;background:white}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px #c52f3b18}.field textarea{min-height:76px;resize:vertical}.help{font-size:10px;color:var(--muted)}.line-items{display:grid;gap:8px;margin-bottom:12px}.line{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px;border:1px solid var(--line);border-radius:9px}.line strong{font-size:12px;display:block}.line small{font-size:10px;color:var(--muted)}.qty{display:flex;align-items:center;gap:7px}.qty button{width:26px;height:26px;border:1px solid var(--line);background:white;border-radius:7px}.total{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:12px 0;font-weight:850}.tabs{display:flex;gap:7px;margin-bottom:12px}.tabs button{flex:1;border:1px solid var(--line);background:#fff;padding:9px;border-radius:8px;color:var(--muted);font-weight:700}.tabs button.active{background:var(--red-pale);color:var(--red-dark);border-color:#e8a5a7}.btn:disabled{background:#aaa;color:#fff;cursor:not-allowed}.toast{position:fixed;z-index:20;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;background:#272b2c;color:white;border-radius:9px;padding:10px 15px;font-size:12px;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}footer{border-top:1px solid var(--line);padding:18px 5%;color:var(--muted);font-size:10px;display:flex;justify-content:space-between}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding:0 3%}.hero-art{margin-right:0}.top{padding:0 3%}.top nav{gap:0}}
+    @media(max-width:650px){.top{height:auto;min-height:65px;flex-wrap:wrap;padding:10px 4%;gap:7px}.top nav{order:3;width:100%;overflow:auto}.top nav button{white-space:nowrap}.actions{margin-left:auto}.actions .btn{font-size:10px;padding:8px}.hero{padding:28px 22px;min-height:220px}.hero-art{display:none}.wrap{padding:0 4%}main{padding-top:18px}.search-row{align-items:stretch;flex-direction:column}.search{max-width:none;flex:none}.grid{grid-template-columns:1fr}.photo{height:150px}.title-row{align-items:flex-start}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.page-title{align-items:flex-start}.page-title h1{font-size:23px}footer{padding:16px 4%;flex-direction:column;gap:5px}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="/" aria-label="Kibet Stocks home"><span class="mark">🌾</span><span><strong>KIBET STOCKS</strong><small>FARM PRODUCTS FROM LOCAL SELLERS</small></span></a>
+    <nav><button onclick="showPage('market')">Marketplace</button><button onclick="showOrders()">My orders</button><button onclick="showSeller()">Seller studio</button></nav>
+    <div class="actions"><button class="btn btn-light" onclick="openListing()">＋ Sell</button><button class="btn" onclick="openCart()">Cart <span class="cart-count" id="cartCount">0</span></button><button class="btn btn-light" id="accountButton" onclick="openAuth()">Sign in</button><a class="nav-link" href="/admin">Admin</a></div>
+  </header>
+  <main class="wrap">
+    <section class="page active" id="market">
+      <div class="hero"><div class="hero-text"><div class="eyebrow">Farm produce, livestock and supplies</div><h1>Buy and sell direct<br>from Kenyan farms.</h1><p>Browse freely. Sellers publish their own products, prices and available quantities. Sign in when you're ready to place an order.</p><button class="btn" onclick="document.getElementById('catalogue').scrollIntoView({behavior:'smooth'})">Explore products →</button></div><div class="hero-art" aria-hidden="true">🍅🌽</div></div>
+      <div class="title-row" id="catalogue"><div><h2>Farm products</h2><p>Browse items from independent local sellers.</p></div></div>
+      <div class="search-row"><label class="search">⌕ <input id="search" type="search" placeholder="Search products, sellers or counties"></label><div class="filters" id="filters"></div></div>
+      <div class="grid" id="productGrid"></div><div class="empty" id="empty">No products found. Try a different search.</div>
+      <div class="notice">Payments are collected through the configured M-Pesa or card provider. Sellers register their M-Pesa payout number; payment settlement to sellers is handled by the marketplace operator.</div>
+    </section>
+    <section class="page" id="ordersPage"><div class="page-title"><div><h1>My orders</h1><p>Payment and order status for your purchases.</p></div><button class="btn btn-light" onclick="loadOrders()">Refresh</button></div><div id="orderList" class="panel">Sign in as a customer to see your orders.</div></section>
+    <section class="page" id="sellerPage"><div class="page-title"><div><h1>Seller studio</h1><p>Manage your products, prices, stock and M-Pesa receiving number.</p></div><button class="btn" onclick="openListing()">＋ List a product</button></div>
+      <div class="panel"><h2>M-Pesa payout number</h2><p>Enter the Kenyan number where you receive seller proceeds. Finance staff can see it when settling paid orders.</p><div class="field"><label for="payoutPhone">Receiving number</label><input id="payoutPhone" type="tel" placeholder="0712345678 or 254712345678"></div><button class="btn btn-small" onclick="savePayout()">Save payout number</button></div>
+      <div class="panel"><h2>Your product listings</h2><div id="sellerProducts">Sign in with a seller account to manage listings.</div></div>
+      <div class="panel"><h2>Orders containing your products</h2><div id="sellerOrders">Sign in with a seller account to see orders.</div></div>
+    </section>
+  </main>
+  <footer><span><b>KIBET STOCKS</b> · Farm products from local sellers</span><span>Secure online marketplace · Kenya</span></footer>
+
+  <div class="backdrop" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle"><div class="modal">
+    <div class="modal-head"><div><h2 id="authTitle">Sign in to continue</h2><p>Browse the marketplace without an account. Sign in is required to order or sell.</p></div><button class="close" onclick="closeModal('authModal')" aria-label="Close">×</button></div>
+    <div class="tabs"><button class="active" id="loginTab" onclick="setAuthMode('login')">Sign in</button><button id="registerTab" onclick="setAuthMode('register')">Create account</button></div>
+    <form id="loginForm"><div class="field"><label>Email</label><input name="email" type="email" autocomplete="email" required></div><div class="field"><label>Password</label><input name="password" type="password" autocomplete="current-password" required></div><button class="btn" style="width:100%">Sign in</button></form>
+    <form id="registerForm" hidden><div class="field"><label>Account type</label><select name="role" id="registerRole"><option value="customer">Customer — I want to buy</option><option value="seller">Seller — I want to list products</option></select></div>
+      <div class="form-grid"><div class="field"><label>Full name</label><input name="name" required autocomplete="name"></div><div class="field"><label>Email</label><input name="email" type="email" required autocomplete="email"></div><div class="field"><label>Phone</label><input name="phone" type="tel" required autocomplete="tel"></div><div class="field"><label>Password (8+ characters)</label><input name="password" type="password" required minlength="8" autocomplete="new-password"></div></div>
+      <div class="field" id="payoutField" hidden><label>M-Pesa number to receive your seller payouts</label><input name="payout_phone" type="tel" placeholder="0712345678"></div><button class="btn" style="width:100%">Create account</button></form>
+  </div></div>
+  <div class="backdrop" id="cartModal" role="dialog" aria-modal="true" aria-labelledby="cartTitle"><div class="modal wide">
+    <div class="modal-head"><div><h2 id="cartTitle">Your cart</h2><p>Review items and provide the delivery destination to order.</p></div><button class="close" onclick="closeModal('cartModal')" aria-label="Close">×</button></div>
+    <div class="line-items" id="cartLines"></div><div class="total"><span>Total</span><span id="cartTotal">KES 0</span></div>
+    <div id="signInCheckout"><p class="help">Sign in or create a customer account to continue to checkout.</p><button class="btn" onclick="openAuth(true)">Sign in to checkout</button></div>
+    <form id="checkoutForm" hidden><div class="form-grid">
+      <div class="field"><label>Delivery county</label><select id="deliveryCounty" required><option value="">Select county</option><option>Nakuru</option><option>Uasin Gishu</option><option>Kiambu</option><option>Trans Nzoia</option><option>Meru</option><option>Nyandarua</option><option>Other</option></select></div>
+      <div class="field"><label>M-Pesa phone (for STK prompt)</label><input id="mpesaPhone" type="tel" placeholder="0712345678"></div>
+      <div class="field full"><label>Destination address / landmark</label><textarea id="destination" required minlength="4" placeholder="Town, estate, road and nearest landmark"></textarea></div>
+    </div><button type="button" class="btn btn-light btn-small" onclick="shareLocation()">Share current destination location</button><span class="help" id="geoStatus"> Optional: attach GPS coordinates to your delivery address.</span><p class="help">Choose a payment option. The payment provider collects money; card details are entered only on the provider's secure checkout page.</p><div class="notice" id="paymentReadiness">Checking available payment methods…</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="mpesaButton" class="btn" type="button" onclick="checkout('mpesa')" disabled>Pay with M-Pesa</button><button id="cardButton" class="btn btn-green" type="button" onclick="checkout('card')" disabled>Pay by card</button></div>
+    </form>
+  </div></div>
+  <div class="backdrop" id="listingModal" role="dialog" aria-modal="true" aria-labelledby="listingTitle"><div class="modal wide">
+    <div class="modal-head"><div><h2 id="listingTitle">List a product</h2><p>Set the price and quantity yourself. Seller account and payout number are required.</p></div><button class="close" onclick="closeModal('listingModal')" aria-label="Close">×</button></div>
+    <form id="listingForm"><div class="form-grid">
+      <div class="field"><label>Product name</label><input name="title" required maxlength="200"></div><div class="field"><label>Category</label><select name="category" required><option value="">Choose category</option><option>Produce</option><option>Grains</option><option>Livestock</option><option>Seeds & inputs</option><option>Equipment</option><option>Other</option></select></div>
+      <div class="field"><label>Your price (KES)</label><input name="price" type="number" min="1" step="1" required></div><div class="field"><label>Price unit</label><select name="unit" required><option>per kg</option><option>per bag</option><option>per piece</option><option>per crate</option><option>per animal</option><option>per item</option></select></div>
+      <div class="field"><label>Available quantity</label><input name="stock" type="number" min="0" step="1" required></div><div class="field"><label>County</label><select name="county" required><option value="">Select county</option><option>Nakuru</option><option>Uasin Gishu</option><option>Kiambu</option><option>Trans Nzoia</option><option>Meru</option><option>Nyandarua</option><option>Other</option></select></div>
+      <div class="field full"><label>Product photo (JPG, PNG, WebP; up to 5 MB)</label><input name="image" type="file" accept="image/jpeg,image/png,image/webp"></div>
+      <div class="field full"><label>Product details</label><textarea name="description" placeholder="Quality, harvest date, size or other useful details"></textarea></div>
+    </div><button class="btn" style="width:100%">Publish product</button></form>
+  </div></div>
+  <div class="backdrop" id="productModal" role="dialog" aria-modal="true" aria-labelledby="productDetailTitle"><div class="modal">
+    <div class="modal-head"><div><h2 id="productDetailTitle">Product details</h2></div><button class="close" onclick="closeModal('productModal')" aria-label="Close">×</button></div><div id="productDetails"></div>
+  </div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    const $=id=>document.getElementById(id);
+    const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    let token=localStorage.getItem("kibet_token")||"",user=null,products=[],cart=JSON.parse(localStorage.getItem("kibet_cart")||"[]"),category="All",latitude=null,longitude=null,authNextCheckout=false,toastTimer,paymentConfig={mpesa_ready:false,card_ready:false};
+    const categories=["All","Produce","Grains","Livestock","Seeds & inputs","Equipment","Other"];
+    async function api(path,method="GET",body,form=false){
+      const headers={};if(token)headers.Authorization="Bearer "+token;if(body&&!form)headers["Content-Type"]="application/json";
+      const response=await fetch("/api/"+path,{method,headers,body:form?body:body?JSON.stringify(body):undefined});
+      const data=await response.json().catch(()=>({detail:"Unexpected server response"}));
+      if(!response.ok)throw new Error(data.detail||"Request failed ("+response.status+")");
+      return data;
+    }
+    function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),3300)}
+    function openModal(id){$(id).classList.add("open")}function closeModal(id){$(id).classList.remove("open")}
+    function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));window.scrollTo({top:0,behavior:"smooth"})}
+    function setAuthMode(mode){$("loginForm").hidden=mode!=="login";$("registerForm").hidden=mode!=="register";$("loginTab").classList.toggle("active",mode==="login");$("registerTab").classList.toggle("active",mode==="register");$("authTitle").textContent=mode==="login"?"Sign in to continue":"Create your account"}
+    function openAuth(checkoutIntent=false){authNextCheckout=authNextCheckout||checkoutIntent;setAuthMode("login");openModal("authModal")}
+    function syncAuth(){
+      $("accountButton").textContent=user?user.name.split(" ")[0]:"Sign in";
+      $("accountButton").onclick=()=>user?signOut():openAuth();
+      $("checkoutForm").hidden=!(user&&user.role==="customer");
+      $("signInCheckout").hidden=!!(user&&user.role==="customer");
+    }
+    async function completeAuth(data){
+      token=data.token;localStorage.setItem("kibet_token",token);
+      user=await api("me");syncAuth();closeModal("authModal");
+      if(authNextCheckout){authNextCheckout=false;openCart()}
+      if(user.role==="seller"||user.role==="provider")loadSeller();
+      if($("ordersPage").classList.contains("active")&&user.role==="customer")loadOrders();
+      toast("Signed in as "+user.name);
+    }
+    $("loginForm").addEventListener("submit",async event=>{event.preventDefault();const form=Object.fromEntries(new FormData(event.target));try{await completeAuth(await api("auth/login","POST",form))}catch(error){toast(error.message)}});
+    $("registerRole").addEventListener("change",()=>{$("payoutField").hidden=$("registerRole").value!=="seller"});
+    $("registerForm").addEventListener("submit",async event=>{event.preventDefault();const form=Object.fromEntries(new FormData(event.target));try{await completeAuth(await api("auth/register","POST",form))}catch(error){toast(error.message)}});
+    function signOut(){localStorage.removeItem("kibet_token");token="";user=null;syncAuth();toast("Signed out. The marketplace remains open to browse.")}
+    function renderFilters(){ $("filters").innerHTML=categories.map(c=>`<button class="filter ${c===category?"active":""}" onclick="setCategory('${escapeHtml(c)}')">${escapeHtml(c)}</button>`).join("")}
+    function setCategory(value){category=value;renderFilters();renderProducts()}
+    async function loadProducts(){try{products=await api("products");renderProducts()}catch(error){$("productGrid").innerHTML=`<div class="panel">Could not load products: ${escapeHtml(error.message)}. Refresh to try again.</div>`}}
+    function renderProducts(){
+      const query=$("search").value.trim().toLowerCase();
+      const list=products.filter(p=>(category==="All"||p.category===category)&&[p.title,p.seller_name,p.category,p.county,p.description].join(" ").toLowerCase().includes(query));
+      $("productGrid").innerHTML=list.map(p=>`<article class="card"><div class="photo">${p.image_url?`<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.title)}">`:`<span class="emoji">🌾</span>`}<span class="tag">${escapeHtml(p.category)}</span></div><div class="card-body"><div class="product-head"><h3>${escapeHtml(p.title)}</h3><span class="stock">${Number(p.stock).toLocaleString()} available</span></div><div class="seller">${escapeHtml(p.seller_name)} · ${escapeHtml(p.county)}</div><p class="desc">${escapeHtml(p.description||"Farm product available from a local seller.")}</p><div class="card-foot"><span class="price">KES ${Number(p.price).toLocaleString()} <small>${escapeHtml(p.unit)}</small></span><span class="card-actions"><button class="btn btn-light btn-small" onclick="viewProduct(${p.id})">View</button><button class="btn btn-small" onclick="addToCart(${p.id})" ${p.stock<1?"disabled":""}>Add</button></span></div></div></article>`).join("");
+      $("empty").style.display=list.length?"none":"block";
+      $("empty").innerHTML=products.length?"No products found. Try a different search.":"No products listed yet. Sellers can create an account to publish the first item.";
+    }
+    function viewProduct(id){const p=products.find(item=>item.id===id);if(!p)return;$("productDetailTitle").textContent=p.title;$("productDetails").innerHTML=`<div class="photo" style="border-radius:12px;margin-bottom:13px">${p.image_url?`<img src="${escapeHtml(p.image_url)}" alt="${escapeHtml(p.title)}">`:"<span class=emoji>🌾</span>"}</div><p><b>${escapeHtml(p.seller_name)}</b> · ${escapeHtml(p.county)}</p><p>${escapeHtml(p.description)}</p><p><b>KES ${Number(p.price).toLocaleString()} ${escapeHtml(p.unit)}</b> · ${Number(p.stock).toLocaleString()} available</p><button class=btn onclick="addToCart(${p.id});closeModal('productModal')">Add to cart</button>`;openModal("productModal")}
+    function saveCart(){localStorage.setItem("kibet_cart",JSON.stringify(cart));renderCart()}
+    function addToCart(id){const p=products.find(item=>item.id===id);if(!p)return;const item=cart.find(x=>x.product_id===id);if(item&&item.quantity>=p.stock)return toast("Cart quantity cannot exceed available stock.");if(item)item.quantity++;else cart.push({product_id:id,quantity:1});saveCart();toast("Added to cart")}
+    function changeQty(id,delta){const item=cart.find(x=>x.product_id===id),p=products.find(x=>x.id===id);if(!item||!p)return;item.quantity=Math.min(p.stock,item.quantity+delta);if(item.quantity<1)cart=cart.filter(x=>x.product_id!==id);saveCart()}
+    function renderCart(){
+      $("cartCount").textContent=cart.reduce((sum,x)=>sum+x.quantity,0);
+      $("cartLines").innerHTML=cart.length?cart.map(x=>{const p=products.find(q=>q.id===x.product_id);if(!p)return"";return`<div class=line><span><strong>${escapeHtml(p.title)}</strong><small>KES ${Number(p.price).toLocaleString()} ${escapeHtml(p.unit)} · ${escapeHtml(p.seller_name)}</small></span><span class=qty><button onclick="changeQty(${p.id},-1)" aria-label="Remove one">−</button><b>${x.quantity}</b><button onclick="changeQty(${p.id},1)" aria-label="Add one">+</button></span></div>`}).join(""):"<p class=help>Your cart is empty. Browse and add a product first.</p>";
+      $("cartTotal").textContent="KES "+cart.reduce((sum,x)=>{const p=products.find(q=>q.id===x.product_id);return sum+(p?p.price*x.quantity:0)},0).toLocaleString();
+    }
+    function openCart(){renderCart();syncAuth();openModal("cartModal")}
+    function shareLocation(){if(!navigator.geolocation){$("geoStatus").textContent="This browser does not support location sharing.";return} $("geoStatus").textContent="Requesting location permission…";navigator.geolocation.getCurrentPosition(position=>{latitude=position.coords.latitude;longitude=position.coords.longitude;$("geoStatus").textContent="Destination coordinates attached. Confirm the written address above.";},error=>{$("geoStatus").textContent=error.code===1?"Location permission was denied. Enter the delivery address instead.":"Could not get GPS location. Enter the delivery address instead.";},{enableHighAccuracy:true,timeout:12000})}
+    async function checkout(method){
+      if(!user||user.role!=="customer"){authNextCheckout=true;closeModal("cartModal");openAuth(true);return}
+      if(!cart.length)return toast("Your cart is empty.");
+      if(method==="mpesa"&&!paymentConfig.mpesa_ready)return toast("M-Pesa is not configured for this server.");
+      if(method==="card"&&!paymentConfig.card_ready)return toast("Card payments are not configured for this server.");
+      const destination=$("destination").value.trim(),county=$("deliveryCounty").value;
+      if(!destination||!county)return toast("Enter the destination address and county.");
+      if(method==="mpesa"&&!$("mpesaPhone").value.trim())return toast("Enter the phone number for the M-Pesa payment prompt.");
+      try{
+        const order=await api("orders","POST",{items:cart,destination,county,latitude,longitude,payment_method:method});
+        toast("Order #"+order.id+" created. Starting secure payment…");
+        if(method==="mpesa"){
+          const result=await api(`orders/${order.id}/pay/mpesa`,"POST",{phone:$("mpesaPhone").value.trim()});
+          cart=[];saveCart();closeModal("cartModal");showPage("ordersPage");await loadOrders();
+          toast(result.message||"Approve the M-Pesa prompt on your phone.");
+        }else{
+          const result=await api(`orders/${order.id}/pay/card`,"POST",{});
+          window.location.assign(result.checkout_url);
+        }
+      }catch(error){toast(error.message);if(error.message.includes("not configured"))showOrders()}
+    }
+    async function showOrders(){showPage("ordersPage");if(!user){openAuth();return}await loadOrders()}
+    function showSeller(){if(!user||!["seller","provider"].includes(user.role)){openAuth();return}loadSeller()}
+    async function loadOrders(){
+      if(!user){$("orderList").textContent="Sign in as a customer to see your orders.";openAuth();return}
+      try{const orders=await api("orders/mine");$("orderList").innerHTML=orders.length?orders.map(o=>`<div class=row><span><strong>Order #${o.id} · KES ${Number(o.total).toLocaleString()}</strong><small>${o.items.map(i=>`${escapeHtml(i.name)} × ${i.quantity}`).join(", ")}</small><small>Deliver to ${escapeHtml(o.destination)}, ${escapeHtml(o.county)} · ${new Date(o.created_at).toLocaleString()}</small><small>Payment: ${escapeHtml(o.payment_method)} · ${escapeHtml(o.payment_status)} · Status: ${escapeHtml(o.status)} ${o.payment_reference?"· "+escapeHtml(o.payment_reference):""}</small></span>${o.payment_status==="pending"||o.payment_status==="failed"?`<button class=btn-small onclick="retryPayment(${o.id},'${escapeHtml(o.payment_method)}')">Retry payment</button>`:`<span class="status ${o.payment_status==="paid"?"paid":""}">${escapeHtml(o.payment_status)}</span>`}</div>`).join(""):"<p>No orders yet.</p>"}catch(error){$("orderList").textContent=error.message}
+    }
+    async function retryPayment(id,method){try{if(method==="mpesa"){const phone=prompt("Enter the M-Pesa phone number for the payment prompt:");if(!phone)return;const result=await api(`orders/${id}/pay/mpesa`,"POST",{phone});toast(result.message)}else{const result=await api(`orders/${id}/pay/card`,"POST",{});window.location.assign(result.checkout_url)}}catch(error){toast(error.message)}}
+    function openListing(){if(!user||!["seller","provider"].includes(user.role)){openAuth();return}openModal("listingModal")}
+    $("listingForm").addEventListener("submit",async event=>{event.preventDefault();if(!user||!["seller","provider"].includes(user.role)){openAuth();return}const data=new FormData(event.target);try{const product=await api("seller/products","POST",data,true);products.unshift(product);renderProducts();event.target.reset();closeModal("listingModal");loadSeller();toast("Product published.")}catch(error){toast(error.message)}});
+    async function loadSeller(){
+      showPage("sellerPage");
+      if(!user||!["seller","provider"].includes(user.role)){ $("sellerProducts").textContent="Create or sign in with a seller account to manage products."; $("sellerOrders").textContent="";return}
+      try{const [payout,listings,orders]=await Promise.all([api("seller/payout"),api("seller/products"),api("seller/orders")]);$("payoutPhone").value=payout.payout_phone||"";
+        $("sellerProducts").innerHTML=listings.length?listings.map(p=>`<div class=row><span><strong>${escapeHtml(p.title)} · KES ${Number(p.price).toLocaleString()} ${escapeHtml(p.unit)}</strong><small>${Number(p.stock)} in stock · ${escapeHtml(p.county)} · ${p.active?"Listed":"Hidden"}</small></span><span><input aria-label="New price" id="price${p.id}" type=number min=1 value="${p.price}"><input aria-label="New stock" id="stock${p.id}" type=number min=0 value="${p.stock}"><button class="btn btn-small" onclick="updateProduct(${p.id})">Save</button></span></div>`).join(""):"<p>No products listed yet.</p>";
+        $("sellerOrders").innerHTML=orders.length?orders.map(o=>`<div class=row><span><strong>Order #${o.id} · KES ${Number(o.total).toLocaleString()} · ${escapeHtml(o.payment_status)}</strong><small>${o.items.map(i=>`${escapeHtml(i.name)} × ${i.quantity}`).join(", ")}</small><small>Destination: ${escapeHtml(o.destination)}, ${escapeHtml(o.county)}</small></span></div>`).join(""):"<p>No orders containing your products yet.</p>";
+      }catch(error){$("sellerProducts").textContent=error.message}
+    }
+    async function savePayout(){try{const result=await api("seller/payout","PUT",{payout_phone:$("payoutPhone").value.trim()});$("payoutPhone").value=result.payout_phone;toast("M-Pesa receiving number saved.")}catch(error){toast(error.message)}}
+    async function updateProduct(id){try{await api(`seller/products/${id}`,"PATCH",{price:Number($("price"+id).value),stock:Number($("stock"+id).value)});await loadProducts();await loadSeller();toast("Product details updated.")}catch(error){toast(error.message)}}
+    async function start(){
+      renderFilters();renderCart();await loadProducts();
+      try{paymentConfig=await api("payments/config");$("mpesaButton").disabled=!paymentConfig.mpesa_ready;$("cardButton").disabled=!paymentConfig.card_ready;
+        const available=[paymentConfig.mpesa_ready?"M-Pesa":"",paymentConfig.card_ready?"card":""].filter(Boolean);
+        $("paymentReadiness").textContent=available.length?"Available now: "+available.join(" and ")+".":"Checkout payments need Safaricom Daraja and/or Stripe credentials plus a public HTTPS deployment callback.";
+      }catch(error){$("paymentReadiness").textContent="Unable to check payment setup: "+error.message}
+      if(token){try{user=await api("me");syncAuth()}catch{signOut()}}else syncAuth();
+      const params=new URLSearchParams(location.search);
+      if(params.has("payment")){history.replaceState(null,"",location.pathname);toast(params.get("payment")==="success"?"Payment return received. Confirm the paid status in My orders.":"Card checkout was cancelled; your order remains available for retry.");}
+    }
+    $("search").addEventListener("input",renderProducts);
+    document.querySelectorAll(".backdrop").forEach(backdrop=>backdrop.addEventListener("click",event=>{if(event.target===backdrop)backdrop.classList.remove("open")}));
+    document.addEventListener("keydown",event=>{if(event.key==="Escape")document.querySelectorAll(".backdrop.open").forEach(m=>m.classList.remove("open"))});
+    start();
+  </script>
+</body>
+</html>

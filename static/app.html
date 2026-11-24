@@ -1,0 +1,67 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FambeermConn</title><style>
+:root{--bg:#f5f7fa;--card:#fff;--ink:#14213d;--mut:#667;--pri:#0b6e4f;--line:#dde3ea}
+@media(prefers-color-scheme:dark){:root{--bg:#10151c;--card:#19212b;--ink:#e8edf3;--mut:#9aa7b5;--pri:#2fbf8f;--line:#2a3542}}
+*{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.w{max-width:760px;margin:0 auto;padding:14px}.c{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:10px 0}
+input,select,button,textarea{padding:9px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit;margin:3px 0;max-width:100%}
+button{background:var(--pri);color:#fff;border:0;cursor:pointer}button.d{background:#c0392b}button.l{background:none;color:var(--pri);border:1px solid var(--pri)}
+.t{background:var(--bg);padding:2px 8px;border-radius:10px;font-size:13px;border:1px solid var(--line)}label{display:block;margin:2px 0}
+</style></head><body>
+<header><b>FAMBEERMCONN</b><span id="who"></span></header><div class="w" id="view"></div><div class="w" id="ft" style="text-align:center;color:var(--mut)"></div>
+<script>
+let T=localStorage.mhp;const $=i=>document.getElementById(i),view=$('view');
+const h=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const ST={awaiting_payment:'Awaiting payment',payment_submitted:'Payment being checked',funded:'Paid – held in escrow',delivered:'Delivered – awaiting approval',approved:'Approved – payout pending',disputed:'Disputed – under review',released:'Completed – provider paid',refunded:'Refunded'};
+async function api(p,m='GET',b,form){let hd={};if(T)hd.Authorization='Bearer '+T;if(!form)hd['Content-Type']='application/json';
+let r=await fetch('/api/'+p,{method:m,headers:hd,body:form?b:b?JSON.stringify(b):undefined});let d=await r.json().catch(()=>({}));
+if(!r.ok){alert(typeof d.detail=='string'?d.detail:'Check your input');return null}return d}
+function authView(){view.innerHTML=`<div class=c><h2>Sign in</h2><input id=le placeholder=Email><br><input id=lp type=password placeholder=Password><br><button onclick="login()">Sign in</button></div>
+<div class=c><h2>Create account</h2><select id=rr onchange="$('bn').style.display=this.value=='provider'?'':'none'"><option value=customer>I need a service (customer)</option><option value=provider>I offer services (provider)</option></select><br>
+<input id=rn placeholder="Full name"><br><input id=re placeholder=Email><br><input id=rph placeholder=Phone><br><input id=bn placeholder="Business name" style="display:none"><br><input id=rp type=password placeholder="Password (8+ chars)"><br><button onclick="reg()">Create account</button></div>`}
+async function login(){let d=await api('auth/login','POST',{email:le.value,password:lp.value});if(d){T=localStorage.mhp=d.token;boot()}}
+async function reg(){let d=await api('auth/register','POST',{email:re.value,password:rp.value,name:rn.value,phone:rph.value,role:rr.value,business_name:bn.value});if(d){T=localStorage.mhp=d.token;boot()}}
+function out(){localStorage.removeItem('mhp');T=null;$('who').innerHTML='';authView()}
+async function boot(){if(!T)return authView();let m=await api('me');if(!m)return out();
+$('who').innerHTML=`${h(m.name)} (${m.role}) <button class=l onclick="out()">Sign out</button>`;
+if(m.role=='provider')provider();else if(m.role=='customer')customer();else view.innerHTML='<div class=c>Staff accounts use the <a href="/admin">admin dashboard</a>.</div>'}
+// ---------- customer
+let INS='';
+async function customer(){let [sv,ins,my]=await Promise.all([api('services'),api('escrow/instructions'),api('bookings/mine')]);INS=ins||'';
+view.innerHTML=`<div class=c><h3>Book a service</h3><select id=sv onchange="loadProv()"><option value="">Choose a service…</option>${sv.map(s=>`<option value=${s.id} data-p=${s.price}>${h(s.name)}${s.price?` – ${h(s.currency)} ${s.price}`:''}</option>`).join('')}</select><br>
+<select id=pv onchange="showWa()"><option>Choose a service first</option></select><div id=wa></div><input id=dt type=datetime-local><br><input id=am type=number placeholder="Agreed quotation (KES)"><br><input id=nt placeholder="Notes"><br>
+<button onclick="book()">Book &amp; pay into escrow</button></div><h3>My bookings</h3>${my.map(card).join('')||'<p>No bookings yet.</p>'}`}
+async function loadProv(){let id=sv.value;if(!id)return;let p=await api('providers?service_id='+id);if(!p)return;PV=p;
+pv.innerHTML=p.length?p.map(x=>`<option value=${x.id}>${h(x.business_name)} – ${h(x.service_area)}</option>`).join(''):'<option value="">No verified providers yet</option>';showWa()}
+let PV=[];
+function showWa(){let p=PV.find(x=>x.id==pv.value);wa.innerHTML=p&&p.whatsapp?`<a href="https://wa.me/${encodeURIComponent(p.whatsapp)}?text=${encodeURIComponent('Hello, I found you on FambeermConn and need your farm service.')}" target=_blank rel=noopener>💬 Chat with ${h(p.business_name)} on WhatsApp</a><br><small>Agree the price on WhatsApp, then book here so your payment is protected by escrow.</small>`:''}
+async function book(){if(!sv.value||!pv.value||!dt.value)return alert('Choose service, provider and date');
+let d=await api('bookings','POST',{service_id:+sv.value,provider_id:+pv.value,scheduled_at:dt.value,notes:nt.value,amount:+am.value||0});if(d){alert('Booked. Now pay into escrow using the instructions shown.');customer()}}
+function card(v){let b=v.booking,e=v.escrow,x=`<div class=c><b>#${b.id} ${h(v.service)}</b> · ${h(v.provider)}<br>${h(b.scheduled_at)} · ${h(e.currency)} ${e.amount}<br><span class=t>${ST[e.status]}</span>`;
+if(e.status=='awaiting_payment')x+=`<p>${h(INS)}</p><p>Your booking ref: <b>FC-${b.id}</b></p><input id=r${e.id} placeholder="Payment confirmation code"><button onclick="pay(${e.id})">I have paid</button>`;
+if(e.status=='delivered')x+=`<p>Happy with the work? Approving lets us pay the provider.</p><button onclick="act(${e.id},'approve')">Approve &amp; release payment</button> `;
+if(['funded','delivered'].includes(e.status))x+=` <button class=d onclick="disp(${e.id})">Report a problem</button>`;return x+'</div>'}
+async function pay(id){if(await api(`escrow/${id}/pay`,'POST',{ref:$('r'+id).value}))customer()}
+async function act(id,a){if(await api(`escrow/${id}/${a}`,'POST',{}))boot()}
+async function disp(id){let n=prompt('Describe the problem:');if(n&&await api(`escrow/${id}/dispute`,'POST',{note:n}))customer()}
+// ---------- provider
+async function provider(){let [d,sv]=await Promise.all([api('provider/me'),api('services')]);if(!d)return;let p=d.profile,mine=(p.service_ids||'').split(',');
+view.innerHTML=`<div class=c><h3>Verification: <span class=t>${h(p.verification_status.replace('_',' '))}</span></h3>${p.verification_note?`<p><b>Message from admin:</b> ${h(p.verification_note)}</p>`:''}
+<p>Upload a clear photo or scan of your National ID or passport, plus licences if your service needs them. JPG, PNG or PDF, max 8 MB. Files are private: only verification staff can open them.</p>
+<select id=dtp>${d.doc_types.map(t=>`<option>${h(t)}</option>`).join('')}</select> <input id=df type=file accept=".jpg,.jpeg,.png,.pdf"> <button onclick="upl()">Upload</button>
+<ul>${d.docs.map(x=>`<li>${h(x.doc_type)} – ${h(x.filename)}</li>`).join('')||'<li>Nothing uploaded yet</li>'}</ul></div>
+<div class=c><h3>Business profile</h3><input id=pb placeholder="Business name" value="${h(p.business_name)}"><br><input id=pa placeholder=Address value="${h(p.address)}"><br>
+<input id=pr placeholder="Service area" value="${h(p.service_area)}"><br><input id=pw placeholder="WhatsApp number with country code, e.g. 2547..." value="${h(p.whatsapp)}" style="width:100%"><br><input id=po placeholder="Payout details (M-Pesa number or bank account)" value="${h(p.payout_info)}" style="width:100%"><p>Services you offer:</p>
+${sv.map(s=>`<label><input type=checkbox class=sc value=${s.id} ${mine.includes(String(s.id))?'checked':''}> ${h(s.name)}</label>`).join('')}<button onclick="save()">Save profile</button></div>
+<h3>My jobs</h3>${d.jobs.map(job).join('')||'<p>No jobs yet. Jobs appear once you are verified and a customer books you.</p>'}`}
+async function upl(){if(!df.files[0])return alert('Choose a file');let f=new FormData();f.append('doc_type',dtp.value);f.append('file',df.files[0]);if(await api('provider/documents','POST',f,true)){alert('Uploaded. Staff will review it.');provider()}}
+async function save(){let ids=[...document.querySelectorAll('.sc:checked')].map(x=>+x.value);if(await api('provider/me','PATCH',{business_name:pb.value,address:pa.value,service_area:pr.value,payout_info:po.value,whatsapp:pw.value,service_ids:ids}))alert('Saved')}
+function job(v){let b=v.booking,e=v.escrow,x=`<div class=c><b>#${b.id} ${h(v.service)}</b><br>${h(b.scheduled_at)} · ${h(e.currency)} ${e.amount} (you receive ${e.payout_amount})<br>${h(b.notes)}<br><span class=t>${ST[e.status]}</span>`;
+if(e.status=='funded')x+=`<p>Customer has paid; funds are safe in escrow. Do the job, then:</p><button onclick="dlv(${e.id})">Mark as delivered</button>`;
+if(e.status=='awaiting_payment')x+=`<p>Wait for the customer's payment before starting.</p>`;return x+'</div>'}
+async function dlv(id){if(await api(`escrow/${id}/deliver`,'POST',{}))provider()}
+boot();
+api('config').then(c=>{if(!c)return;let x=[];if(c.whatsapp_number)x.push(`<a href="https://wa.me/${encodeURIComponent(c.whatsapp_number)}?text=${encodeURIComponent('Hello FambeermConn, I want to book a farm service.')}" target=_blank rel=noopener>💬 Book via WhatsApp</a>`);
+if((c.facebook_page||'').startsWith('https://'))x.push(`<a href="${h(c.facebook_page)}" target=_blank rel=noopener>Facebook page</a>`);
+x.push(`<a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.origin)}" target=_blank rel=noopener>Share on Facebook</a>`);$('ft').innerHTML=x.join(' · ')});
+</script></body></html>

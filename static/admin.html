@@ -1,0 +1,50 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kibet Stocks Admin</title><style>
+:root{--bg:#fff8f6;--card:#fff;--ink:#252c30;--mut:#758087;--pri:#c52f3b;--line:#e9e2e0}
+@media(prefers-color-scheme:dark){:root{--bg:#171416;--card:#241f20;--ink:#f4eeee;--mut:#b8aaad;--pri:#ed626c;--line:#44383a}}
+*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+#login{max-width:340px;margin:12vh auto;background:var(--card);padding:24px;border-radius:12px;border:1px solid var(--line)}
+input,select,button{padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);font:inherit}
+button{cursor:pointer;background:var(--pri);color:#fff;border:0}button.s{background:none;color:var(--pri);border:1px solid var(--pri);padding:3px 8px}
+#app{display:none;min-height:100vh}nav{width:200px;padding:14px;border-right:1px solid var(--line);background:var(--card)}
+nav b{display:block;margin-bottom:12px;color:var(--pri)}nav a{display:block;padding:7px 8px;border-radius:6px;cursor:pointer}nav a.on,nav a:hover{background:var(--bg)}
+main{flex:1;padding:18px;overflow:auto;min-width:0}.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.k{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}.k b{font-size:22px;display:block}.k span{color:var(--mut)}
+.w{overflow-x:auto}table{border-collapse:collapse;width:100%;background:var(--card)}td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.f{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}@media(max-width:700px){#app{flex-direction:column}nav{width:auto;display:flex;overflow-x:auto}nav b{display:none}}
+</style></head><body>
+<div id="login"><h2>Kibet Stocks<br><small>Marketplace administration</small></h2>
+<input id="em" placeholder="Email" style="width:100%;margin:6px 0"><input id="pw" type="password" placeholder="Password" style="width:100%;margin:6px 0">
+<button onclick="login()" style="width:100%">Sign in</button><p id="err" style="color:#c33"></p></div>
+<div id="app" style="display:flex"><nav id="nav"><b>KIBET STOCKS ADMIN</b></nav><main id="main"></main></div>
+<script>
+let T=localStorage.mh,H=()=>({'Content-Type':'application/json',Authorization:'Bearer '+T});
+const SECTIONS={overview:'📊 Overview',users:'👥 Users',providers:'🏢 Providers',seller_profiles:'📱 Seller payout numbers',products:'🛍️ Products',product_orders:'📦 Product orders',product_order_items:'🧾 Order line items',activity:'🕒 Store activity',documents:'🪪 Verification docs',categories:'🌐 Industries & categories',services:'🧩 Services',escrow:'🔒 Escrow',bookings:'📅 Bookings',payments:'💳 Payments',reviews:'⭐ Reviews',complaints:'⚖️ Disputes',audit:'🔐 Audit log',settings:'⚙️ Settings'};
+const ACT={users:[['status','active'],['status','suspended'],['status','blocked']],providers:[['verification_status','under_review'],['verification_status','more_info'],['verification_status','approved'],['verification_status','rejected'],['verification_status','suspended']],
+escrow:[['esc','confirm'],['esc','reject'],['esc','release'],['esc','refund'],['esc','events']],bookings:[['status','confirmed'],['status','completed'],['status','cancelled']],payments:[['refund']],reviews:[['hidden',true],['hidden',false]],complaints:[['status','investigating'],['status','escalated'],['status','resolved']],categories:[['active',false],['active',true]],services:[['active',false],['active',true]],products:[['active',false],['active',true]]};
+const CREATE={categories:['name','parent_id'],services:['name','category_id','description','price','currency'],settings:['key','value']};
+async function api(p,m='GET',b){let r=await fetch('/api/'+p,{method:m,headers:H(),body:b?JSON.stringify(b):undefined});if(!r.ok){alert((await r.json()).detail||r.status);return null}return r.json()}
+async function login(){let r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em.value,password:pw.value})});
+let d=await r.json();if(!r.ok){err.textContent=d.detail;return}T=localStorage.mh=d.token;start()}
+function start(){login_.style.display='none';app.style.display='flex';nav.innerHTML='<b>KIBET STOCKS ADMIN</b>'+Object.entries(SECTIONS).map(([k,v])=>`<a onclick="show('${k}')" id="n_${k}">${v}</a>`).join('')+'<a onclick="localStorage.clear();location.reload()">Sign out</a>';show('overview')}
+const login_=document.getElementById('login');
+let currentSection='';
+async function show(k){currentSection=k;document.querySelectorAll('nav a').forEach(a=>a.classList.remove('on'));document.getElementById('n_'+k)?.classList.add('on');
+if(k=='overview'){let d=await api('admin/overview');if(!d)return;main.innerHTML='<h2>Overview</h2><div class="g">'+Object.entries(d).map(([a,b])=>`<div class="k"><b>${b}</b><span>${a.replace(/_/g,' ')}</span></div>`).join('')+'</div>';return}
+let rows=await api(k=='seller_profiles'?'admin/sellers/payouts':'admin/'+k);if(!rows)return;let cols=rows[0]?Object.keys(rows[0]):[];
+let form=CREATE[k]?`<div class="f">${CREATE[k].map(f=>`<input id="c_${f}" placeholder="${f}">`).join('')}<button onclick="create('${k}')">+ Add</button></div>`:'';
+if(k=='users')form+=`<div class="f"><input id="a_e" placeholder="staff email"><input id="a_n" placeholder="name"><input id="a_p" type="password" placeholder="password"><select id="a_r">${['verification','operations','finance','support','catalogue','analytics','super'].map(r=>`<option>${r}</option>`)}</select><button onclick="addAdmin()">+ Staff account</button></div>`;
+main.innerHTML=`<h2>${SECTIONS[k]}</h2>${form}<div class="w"><table><tr>${cols.map(c=>`<th>${c}</th>`).join('')}<th>actions</th></tr>${rows.map(r=>`<tr>${cols.map(c=>`<td>${E(r[c])}</td>`).join('')}<td>${(ACT[k]||[]).map(a=>a[0]=='esc'?`<button class=s onclick="esc(${r.id},'${a[1]}')">${a[1]}</button>`:a[0]=='refund'?`<button class=s onclick="refund(${r.id})">refund</button>`:`<button class=s onclick="patch('${k}',${r.id},'${a[0]}',${JSON.stringify(a[1])})">${a[1]}</button>`).join(' ')}${k=='documents'?`<button class=s onclick="viewDoc(${r.id})">open</button>`:''}</td></tr>`).join('')}</table></div>`}
+async function patch(k,id,f,v){if(await api(`admin/${k}/${id}`,'PATCH',{[f]:v}))show(k)}
+const E=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+async function esc(id,a){if(a=='events'){let r=await api(`admin/escrow/${id}/events`);return r&&alert(r.map(x=>x.created_at+' '+x.event+' '+(x.note||'')).join('\n'))}
+let ref='',note='';if(a=='release'||a=='refund'){ref=prompt(a=='release'?'Payout M-Pesa/bank reference (after you paid the provider):':'Refund reference (after you paid the customer):');if(!ref)return}
+else if(a=='reject'){note=prompt('Reason:')||''}else if(!confirm('Confirm you SEE this payment in the platform account?'))return;
+if(await api(`admin/escrow/${id}/${a}`,'POST',{ref,note}))show('escrow')}
+async function refund(id){if(confirm('Refund payment?')&&await api(`admin/payments/${id}/refund`,'POST'))show('payments')}
+async function create(k){let b={};CREATE[k].forEach(f=>{let v=document.getElementById('c_'+f).value;if(v!=='')b[f]=isNaN(v)||f=='name'||f=='key'||f=='value'||f=='currency'||f=='description'?v:+v});if(await api('admin/'+k,'POST',b))show(k)}
+async function addAdmin(){if(await api('admin/users','POST',{email:a_e.value,name:a_n.value,password:a_p.value,role:a_r.value}))show('users')}
+async function viewDoc(id){let r=await fetch(`/api/admin/documents/${id}/file`,{headers:H()});if(!r.ok)return alert('Cannot open');open(URL.createObjectURL(await r.blob()))}
+if(T)start();
+setInterval(()=>{if(currentSection==='activity'&&T)show('activity')},10000);
+</script></body></html>
