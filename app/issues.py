@@ -117,7 +117,7 @@ def send_issue_message(issue_id: int, body: MessageIn,
     db.commit()
     return issue_row(db, issue)
 
-@router.post("/api/issues/{issue_id}/{action}")
+@router.post("/api/issues/{issue_id}/status/{action}")
 def issue_action(issue_id: int, action: str, user: User = Depends(current_user), db: Session = Depends(get_db)):
     issue = owned_issue(db, issue_id, user)
     if action == "resolve" and issue.status not in ("resolved", "cancelled"):
