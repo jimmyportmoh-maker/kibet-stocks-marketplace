@@ -6,7 +6,7 @@ def pk(): return Column(Integer, primary_key=True)
 def now(): return Column(DateTime, default=datetime.utcnow)
 class User(Base):
     __tablename__="users"; id=pk()
-    email=Column(String(200),unique=True,index=True); name=Column(String(200)); phone=Column(String(40))
+    email=Column(String(200),unique=True,index=True); name=Column(String(200)); phone=Column(String(40)); farm_name=Column(String(200),default="")
     password_hash=Column(String(200))
     role=Column(String(30),default="customer")  # customer|provider|super|verification|operations|finance|support|catalogue|analytics
     status=Column(String(20),default="active")  # active|suspended|blocked
