@@ -173,6 +173,8 @@ from .portal import router as portal_router
 app.include_router(portal_router)
 from .storefront import router as storefront_router
 app.include_router(storefront_router)
+from .issues import router as issues_router
+app.include_router(issues_router)
 STATIC = os.path.join(os.path.dirname(__file__), "..", "static")
 @app.get("/")
 def home(): return FileResponse(os.path.join(STATIC, "shop.html"))
