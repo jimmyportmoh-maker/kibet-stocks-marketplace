@@ -25,7 +25,7 @@ def view(db, b):
     return {"booking": row(b), "escrow": row(e) if e else None, "service": s.name if s else "", "provider": p.business_name if p else ""}
 
 @router.get("/api/me")
-def me(u: User = Depends(current_user)): return {"id": u.id, "name": u.name, "email": u.email, "role": u.role}
+def me(u: User = Depends(current_user)): return {"id": u.id, "name": u.name, "email": u.email, "phone": u.phone or "", "farm_name": u.farm_name or "", "role": u.role}
 @router.get("/api/services")
 def services(db: Session = Depends(get_db)): return [row(s) for s in db.query(Service).filter_by(active=True)]
 @router.get("/api/config")
