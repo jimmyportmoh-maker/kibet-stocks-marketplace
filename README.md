@@ -1,4 +1,4 @@
-# ALL TRUST STOCKS — Kenyan Farm Marketplace
+# ALL TRUST FLEX STOCKS — Kenyan Farm Marketplace
 FastAPI + SQLAlchemy (PostgreSQL in production, SQLite local/offline mode), bcrypt, JWT, role-based access.
 
 ## Run
