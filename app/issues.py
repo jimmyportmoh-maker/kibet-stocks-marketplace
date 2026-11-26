@@ -144,3 +144,16 @@ def rate_issue(issue_id: int, body: RatingIn,
     issue.rating, issue.rating_comment = body.rating, body.comment
     db.commit()
     return issue_row(db, issue)
+
+
+class FarmProfileIn(BaseModel):
+    farm_name: str = Field(default="", max_length=200)
+    phone: str = Field(default="", max_length=40)
+
+@router.patch("/api/issues/profile")
+def update_farm_profile(body: FarmProfileIn, user: User = Depends(current_user), db: Session = Depends(get_db)):
+    customer(user)
+    user.farm_name = body.farm_name.strip()
+    user.phone = body.phone.strip()
+    db.commit()
+    return {"name": user.name, "phone": user.phone or "", "farm_name": user.farm_name or "", "email": user.email}
