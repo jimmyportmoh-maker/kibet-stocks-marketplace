@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ALTRUST FLEX STOCKS Admin</title><style>
+<title>SHESA FIRM ENTERPRISES Admin</title><style>
 :root{--bg:#fff8f6;--card:#fff;--ink:#252c30;--mut:#758087;--pri:#c52f3b;--line:#e9e2e0}
 @media(prefers-color-scheme:dark){:root{--bg:#171416;--card:#241f20;--ink:#f4eeee;--mut:#b8aaad;--pri:#ed626c;--line:#44383a}}
 *{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif;background:var(--bg);color:var(--ink)}
@@ -13,10 +13,10 @@ main{flex:1;padding:18px;overflow:auto;min-width:0}.g{display:grid;grid-template
 .w{overflow-x:auto}table{border-collapse:collapse;width:100%;background:var(--card)}td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
 .f{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}@media(max-width:700px){#app{flex-direction:column}nav{width:auto;display:flex;overflow-x:auto}nav b{display:none}}
 </style></head><body>
-<div id="login"><h2>ALTRUST FLEX STOCKS<br><small>Marketplace administration</small></h2>
+<div id="login"><h2>SHESA FIRM ENTERPRISES<br><small>Marketplace administration</small></h2>
 <input id="em" placeholder="Email" style="width:100%;margin:6px 0"><input id="pw" type="password" placeholder="Password" style="width:100%;margin:6px 0">
 <button onclick="login()" style="width:100%">Sign in</button><p id="err" style="color:#c33"></p></div>
-<div id="app" style="display:flex"><nav id="nav"><b>ALTRUST FLEX STOCKS ADMIN</b></nav><main id="main"></main></div>
+<div id="app" style="display:flex"><nav id="nav"><b>SHESA FIRM ENTERPRISES ADMIN</b></nav><main id="main"></main></div>
 <script>
 let T=localStorage.mh,H=()=>({'Content-Type':'application/json',Authorization:'Bearer '+T});
 const SECTIONS={overview:'📊 Overview',users:'👥 Users',providers:'🏢 Providers',seller_profiles:'📱 Seller payout numbers',products:'🛍️ Products',product_orders:'📦 Product orders',product_order_items:'🧾 Order line items',activity:'🕒 Store activity',documents:'🪪 Verification docs',categories:'🌐 Industries & categories',services:'🧩 Services',escrow:'🔒 Escrow',bookings:'📅 Bookings',payments:'💳 Payments',reviews:'⭐ Reviews',complaints:'⚖️ Disputes',audit:'🔐 Audit log',settings:'⚙️ Settings'};
@@ -26,7 +26,7 @@ const CREATE={categories:['name','parent_id'],services:['name','category_id','de
 async function api(p,m='GET',b){let r=await fetch('/api/'+p,{method:m,headers:H(),body:b?JSON.stringify(b):undefined});if(!r.ok){alert((await r.json()).detail||r.status);return null}return r.json()}
 async function login(){let r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em.value,password:pw.value})});
 let d=await r.json();if(!r.ok){err.textContent=d.detail;return}T=localStorage.mh=d.token;start()}
-function start(){login_.style.display='none';app.style.display='flex';nav.innerHTML='<b>ALTRUST FLEX STOCKS ADMIN</b>'+Object.entries(SECTIONS).map(([k,v])=>`<a onclick="show('${k}')" id="n_${k}">${v}</a>`).join('')+'<a onclick="localStorage.clear();location.reload()">Sign out</a>';show('overview')}
+function start(){login_.style.display='none';app.style.display='flex';nav.innerHTML='<b>SHESA FIRM ENTERPRISES ADMIN</b>'+Object.entries(SECTIONS).map(([k,v])=>`<a onclick="show('${k}')" id="n_${k}">${v}</a>`).join('')+'<a onclick="localStorage.clear();location.reload()">Sign out</a>';show('overview')}
 const login_=document.getElementById('login');
 let currentSection='';
 async function show(k){currentSection=k;document.querySelectorAll('nav a').forEach(a=>a.classList.remove('on'));document.getElementById('n_'+k)?.classList.add('on');
