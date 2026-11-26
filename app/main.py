@@ -5,7 +5,7 @@ from urllib.parse import quote
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, inspect, text
 from .db import Base, engine, get_db, Session as SessionLocal
 from .models import *
 from .security import hash_pw, check_pw, make_token, current_user, require
@@ -14,8 +14,13 @@ from .seed import seed
 UPLOADS = os.getenv("UPLOAD_DIR") or os.path.join(os.path.dirname(__file__), "..", "private_uploads")
 os.makedirs(UPLOADS, exist_ok=True)
 Base.metadata.create_all(engine)
+# Add the seller county field to existing databases without dropping records.
+with engine.begin() as conn:
+    seller_columns = {column["name"] for column in inspect(engine).get_columns("seller_profiles")}
+    if "county" not in seller_columns:
+        conn.execute(text("ALTER TABLE seller_profiles ADD COLUMN county VARCHAR(80) DEFAULT ''"))
 with SessionLocal() as _s: seed(_s)
-app = FastAPI(title="Kibet Stocks")
+app = FastAPI(title="Altrust Flex Stocks")
 
 # resource -> (model, roles allowed, writable fields, creatable)
 R = {
@@ -58,6 +63,7 @@ class Register(BaseModel):
     role: str = "customer"
     business_name: str = ""
     payout_phone: str = ""
+    county: str = ""
 
 @app.post("/api/auth/login")
 def login(b: Login, db: Session = Depends(get_db)):
@@ -74,6 +80,7 @@ def register(b: Register, db: Session = Depends(get_db)):
     if len(b.password) < 8: raise HTTPException(400, "Password must be 8+ characters")
     if db.query(User).filter_by(email=b.email.lower()).first(): raise HTTPException(409, "Email already registered")
     if b.role == "seller":
+        if not b.county.strip(): raise HTTPException(400, "Select your seller county")
         payout = "".join(c for c in b.payout_phone if c.isdigit())
         if payout.startswith("0"): payout = "254" + payout[1:]
         if not re.fullmatch(r"254[17]\d{8}", payout):
@@ -82,7 +89,7 @@ def register(b: Register, db: Session = Depends(get_db)):
         payout = ""
     u = User(email=b.email.lower(), name=b.name, phone=b.phone, role=b.role, password_hash=hash_pw(b.password)); db.add(u); db.flush()
     if b.role == "provider": db.add(ProviderProfile(user_id=u.id, business_name=b.business_name))
-    if b.role == "seller": db.add(SellerProfile(user_id=u.id, payout_phone=payout))
+    if b.role == "seller": db.add(SellerProfile(user_id=u.id, payout_phone=payout, county=b.county.strip()))
     db.add(ActivityLog(actor_id=u.id, actor_email=u.email, action="account_registered", resource="auth", detail=f"New {b.role} account"))
     db.commit(); return {"token": make_token(u), "role": u.role}
 
