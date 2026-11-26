@@ -19,6 +19,9 @@ with engine.begin() as conn:
     seller_columns = {column["name"] for column in inspect(engine).get_columns("seller_profiles")}
     if "county" not in seller_columns:
         conn.execute(text("ALTER TABLE seller_profiles ADD COLUMN county VARCHAR(80) DEFAULT ''"))
+    user_columns = {column["name"] for column in inspect(engine).get_columns("users")}
+    if "farm_name" not in user_columns:
+        conn.execute(text("ALTER TABLE users ADD COLUMN farm_name VARCHAR(200) DEFAULT ''"))
 with SessionLocal() as _s: seed(_s)
 app = FastAPI(title="SHESA FIRM ENTERPRISES")
 
