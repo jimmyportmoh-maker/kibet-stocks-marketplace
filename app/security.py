@@ -1,5 +1,4 @@
 import os, bcrypt, jwt
-from datetime import datetime, timedelta, timezone
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
@@ -16,13 +15,12 @@ def hash_pw(p):
 def check_pw(p, h):
     return bcrypt.checkpw(p.encode(), h.encode())
 
-def make_token(u, hours=24):
-    now = datetime.now(timezone.utc)
+def make_token(u):
+    # No exp claim: sessions remain valid until the user signs out,
+    # the signing key changes, or the account is deactivated.
     payload = {
         "sub": str(u.id),
         "role": u.role,
-        "iat": now,
-        "exp": now + timedelta(hours=hours),
     }
     return jwt.encode(payload, SECRET, algorithm="HS256")
 
@@ -34,11 +32,9 @@ def current_user(cred=Depends(bearer), db: Session = Depends(get_db)):
             cred.credentials,
             SECRET,
             algorithms=["HS256"],
-            leeway=120,
+            options={"verify_exp": False, "verify_iat": False},
         )
         user_id = int(data["sub"])
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(401, "Session expired. Please sign in again.")
     except (jwt.InvalidTokenError, KeyError, TypeError, ValueError):
         raise HTTPException(401, "Invalid session. Please sign in again.")
 
