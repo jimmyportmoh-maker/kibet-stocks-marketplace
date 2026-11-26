@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from .db import get_db
 from .models import User, FarmIssue, FarmIssueAttachment, FarmIssueMessage
-from .security import current_user
+from .security import current_user, require
 
 router = APIRouter()
 MAX_FILE = 8 * 1024 * 1024
@@ -157,3 +157,37 @@ def update_farm_profile(body: FarmProfileIn, user: User = Depends(current_user),
     user.phone = body.phone.strip()
     db.commit()
     return {"name": user.name, "phone": user.phone or "", "farm_name": user.farm_name or "", "email": user.email}
+
+@router.get("/api/admin/farm-issues")
+def admin_farm_issues(user: User = Depends(require("support")), db: Session = Depends(get_db)):
+    return [issue_row(db, item) for item in db.query(FarmIssue).order_by(FarmIssue.id.desc()).all()]
+
+@router.get("/api/admin/farm-issues/{issue_id}")
+def admin_farm_issue_detail(issue_id: int, user: User = Depends(require("support")), db: Session = Depends(get_db)):
+    issue = db.get(FarmIssue, issue_id)
+    if not issue: raise HTTPException(404, "Issue not found")
+    return issue_row(db, issue)
+
+@router.post("/api/admin/farm-issues/{issue_id}/messages")
+def admin_farm_issue_message(issue_id: int, body: MessageIn, user: User = Depends(require("support")), db: Session = Depends(get_db)):
+    issue = db.get(FarmIssue, issue_id)
+    if not issue: raise HTTPException(404, "Issue not found")
+    db.add(FarmIssueMessage(issue_id=issue.id, sender_id=user.id, message=body.message.strip()))
+    if issue.status == "open": issue.status = "investigating"
+    issue.updated_at = datetime.utcnow()
+    db.commit()
+    return issue_row(db, issue)
+
+class AdminIssueStatus(BaseModel):
+    status: str
+
+@router.patch("/api/admin/farm-issues/{issue_id}")
+def admin_update_farm_issue(issue_id: int, body: AdminIssueStatus, user: User = Depends(require("support")), db: Session = Depends(get_db)):
+    issue = db.get(FarmIssue, issue_id)
+    if not issue: raise HTTPException(404, "Issue not found")
+    if body.status not in ("open", "investigating", "resolved", "cancelled"):
+        raise HTTPException(400, "Invalid issue status")
+    issue.status = body.status
+    issue.updated_at = datetime.utcnow()
+    db.commit()
+    return issue_row(db, issue)
