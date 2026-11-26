@@ -21,6 +21,7 @@ class SellerProfile(Base):
     __tablename__="seller_profiles"; id=pk()
     user_id=Column(Integer,ForeignKey("users.id"),unique=True,index=True)
     payout_phone=Column(String(24),default="")
+    county=Column(String(80),default="")
     created_at=now()
 class VerificationDoc(Base):
     __tablename__="documents"; id=pk()
