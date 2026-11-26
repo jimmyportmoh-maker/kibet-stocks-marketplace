@@ -21,7 +21,7 @@ def issue_row(db, issue):
     photos = db.query(FarmIssueAttachment).filter_by(issue_id=issue.id).order_by(FarmIssueAttachment.id).all()
     messages = db.query(FarmIssueMessage).filter_by(issue_id=issue.id).order_by(FarmIssueMessage.id).all()
     return {
-        "id": issue.id, "crop": issue.crop, "issue_type": issue.issue_type,
+        "id": issue.id, "customer_id": issue.customer_id, "crop": issue.crop, "issue_type": issue.issue_type,
         "urgency": issue.urgency, "description": issue.description,
         "latitude": issue.latitude, "longitude": issue.longitude,
         "status": issue.status, "rating": issue.rating,
@@ -44,7 +44,7 @@ def owned_issue(db, issue_id, user):
 def save_attachment(db, issue, user, upload, kind):
     if not upload or not upload.filename:
         return
-    media = (upload.content_type or "").lower()
+    media = (upload.content_type or "").lower().split(";")[0].strip()
     allowed = IMAGE_TYPES if kind == "image" else VOICE_TYPES
     if media not in allowed:
         raise HTTPException(400, "Unsupported " + kind + " format")
