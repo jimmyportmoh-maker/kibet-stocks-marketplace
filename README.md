@@ -1,4 +1,4 @@
-# ALTRUST FLEX STOCKS — Kenyan Farm Marketplace
+# SHESA FIRM ENTERPRISES — Kenyan Farm Marketplace
 FastAPI + SQLAlchemy (PostgreSQL in production, SQLite local/offline mode), bcrypt, JWT, role-based access.
 
 ## Run
@@ -38,7 +38,7 @@ Uploaded IDs are now stored in the database, so no paid disk is needed.
 1. neon.tech: create a free project, copy the connection string (starts with postgresql://).
 2. render.com: New > Blueprint > pick your GitHub repo (render.yaml is read automatically).
 3. Enter DATABASE_URL (the Neon string), ADMIN_EMAIL and ADMIN_PASSWORD. SECRET_KEY is generated.
-4. When live, "/" = public ALTRUST FLEX STOCKS product marketplace, "/admin" = staff. Free web services sleep after ~15 min idle: open the link a minute before a presentation.
+4. When live, "/" = public SHESA FIRM ENTERPRISES product marketplace, "/admin" = staff. Free web services sleep after ~15 min idle: open the link a minute before a presentation.
 Free-tier terms change; check each provider's current limits. If you used an older version locally, delete fambeermconn_local.db once.
 
 ## Other hosts (no render.yaml needed)
@@ -48,9 +48,9 @@ Set these variables on the host: DATABASE_URL (e.g. a free Neon PostgreSQL strin
 
 ## Legacy service and escrow APIs
 - Existing service, provider verification and manual escrow APIs remain available for existing records and integrations.
-- Manual escrow remains a separate flow from the ALTRUST FLEX STOCKS product order and checkout flow below.
+- Manual escrow remains a separate flow from the SHESA FIRM ENTERPRISES product order and checkout flow below.
 
-## ALTRUST FLEX STOCKS product marketplace and payments
+## SHESA FIRM ENTERPRISES product marketplace and payments
 - The home page is a public product catalogue. Customers can browse before signing in; checkout requires a customer account and a delivery county/address. GPS coordinates can be shared from the browser if the customer allows location access.
 - Sellers create a seller account with their Kenyan M-Pesa receiving number, then publish products with their own KES price, unit, stock, county, description and optional JPG/PNG/WebP photo (up to 5 MB). Images are stored under `private_uploads/products`.
 - Orders are paid to the marketplace's M-Pesa shortcode or Stripe account. The registered seller M-Pesa number is recorded for the marketplace operator to settle seller proceeds. This build does not automatically split or pay out funds to sellers; configure and operate seller payouts before accepting live orders.
