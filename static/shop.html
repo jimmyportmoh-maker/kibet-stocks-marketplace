@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#fff7f5">
+  <meta name="theme-color" content="#16834a">
   <title>SHESA FIRM ENTERPRISES — Kenyan farm products</title>
   <style>
-    :root{--red:#c52f3b;--red-dark:#982432;--red-pale:#fff0ef;--green:#28794d;--green-pale:#eaf4ec;--blue:#2874bd;--ink:#252c30;--muted:#758087;--line:#e9e7e5;--paper:#fff;--bg:#fff9f7;--shadow:0 12px 35px #77302812}
+    :root{--red:#6d28d9;--red-dark:#4c1d95;--red-pale:#f1eafe;--green:#16834a;--green-pale:#e8f5ec;--blue:#2874bd;--ink:#202b25;--muted:#718078;--line:#e2eae4;--paper:#fff;--bg:#f7fbf8;--shadow:0 12px 35px #28583a18}
     *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;color:var(--ink);background:var(--bg);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
     .wrap{max-width:1320px;margin:auto;padding:0 5%}.top{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:5}
     .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}.mark{width:39px;height:39px;border-radius:13px;background:var(--red);color:white;display:grid;place-items:center;font-size:20px}.brand strong{display:block;letter-spacing:.3px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:1.2px}
@@ -21,6 +21,15 @@
     .backdrop{display:none;position:fixed;inset:0;z-index:10;background:#24191ab0;backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:16px}.backdrop.open{display:flex}#authModal.open{z-index:12}.modal{width:min(100%,590px);max-height:92vh;overflow:auto;background:white;border-radius:17px;padding:21px;box-shadow:0 25px 80px #301b1b50}.modal.wide{width:min(100%,720px)}.modal-head{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:15px}.modal-head h2{font-size:19px;margin:0}.modal-head p{font-size:11px;color:var(--muted);margin:3px 0}.close{border:0;background:#f4eeee;border-radius:50%;width:30px;height:30px;font-size:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:4px;margin-bottom:10px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#59646a;font-weight:750}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #dedcda;border-radius:8px;outline:0;background:white}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px #c52f3b18}.field textarea{min-height:76px;resize:vertical}.help{font-size:10px;color:var(--muted)}.line-items{display:grid;gap:8px;margin-bottom:12px}.line{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px;border:1px solid var(--line);border-radius:9px}.line strong{font-size:12px;display:block}.line small{font-size:10px;color:var(--muted)}.qty{display:flex;align-items:center;gap:7px}.qty button{width:26px;height:26px;border:1px solid var(--line);background:white;border-radius:7px}.total{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:12px 0;font-weight:850}.tabs{display:flex;gap:7px;margin-bottom:12px}.tabs button{flex:1;border:1px solid var(--line);background:#fff;padding:9px;border-radius:8px;color:var(--muted);font-weight:700}.tabs button.active{background:var(--red-pale);color:var(--red-dark);border-color:#e8a5a7}.btn:disabled{background:#aaa;color:#fff;cursor:not-allowed}.toast{position:fixed;z-index:20;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;background:#272b2c;color:white;border-radius:9px;padding:10px 15px;font-size:12px;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}footer{border-top:1px solid var(--line);padding:18px 5%;color:var(--muted);font-size:10px;display:flex;justify-content:space-between}
     @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wrap{padding:0 3%}.hero-art{margin-right:0}.top{padding:0 3%}.top nav{gap:0}}
     @media(max-width:650px){.top{height:auto;min-height:65px;flex-wrap:wrap;padding:10px 4%;gap:7px}.top nav{order:3;width:100%;overflow:auto}.top nav button{white-space:nowrap}.actions{margin-left:auto}.actions .btn{font-size:10px;padding:8px}.hero{padding:28px 22px;min-height:220px}.hero-art{display:none}.wrap{padding:0 4%}main{padding-top:18px}.search-row{align-items:stretch;flex-direction:column}.search{max-width:none;flex:none}.grid{grid-template-columns:1fr}.photo{height:150px}.title-row{align-items:flex-start}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.page-title{align-items:flex-start}.page-title h1{font-size:23px}footer{padding:16px 4%;flex-direction:column;gap:5px}}
+  
+    /* SHESA green + purple theme */
+    .hero{background:linear-gradient(112deg,#12633a,#16834a 48%,#6d28d9)!important}
+    .hero .btn{color:#4c1d95!important}
+    .filter.active,.tabs button.active{background:#f1eafe;border-color:#c4a8f5;color:#4c1d95}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:#6d28d9;box-shadow:0 0 0 3px #6d28d918}
+    .mark{background:#16834a}
+    .tag{color:#4c1d95}
+    .btn-green{background:#16834a}
   </style>
 </head>
 <body>
