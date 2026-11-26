@@ -116,3 +116,35 @@ class ActivityLog(Base):
     action=Column(String(60),nullable=False); resource=Column(String(60),nullable=False)
     target_id=Column(Integer,nullable=True); detail=Column(Text,default="")
     created_at=now()
+
+
+class FarmIssue(Base):
+    __tablename__ = "farm_issues"; id = pk()
+    customer_id = Column(Integer, ForeignKey("users.id"), index=True)
+    crop = Column(String(100), nullable=False)
+    issue_type = Column(String(80), nullable=False)
+    urgency = Column(String(20), default="medium")
+    description = Column(Text, default="")
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
+    status = Column(String(30), default="open")  # open|investigating|resolved|cancelled
+    rating = Column(Integer, nullable=True)
+    rating_comment = Column(Text, default="")
+    created_at = now()
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class FarmIssueAttachment(Base):
+    __tablename__ = "farm_issue_attachments"; id = pk()
+    issue_id = Column(Integer, ForeignKey("farm_issues.id"), index=True)
+    uploaded_by = Column(Integer, ForeignKey("users.id"))
+    filename = Column(String(255), default="")
+    media_type = Column(String(100), default="")
+    content = Column(LargeBinary, nullable=False)
+    created_at = now()
+
+class FarmIssueMessage(Base):
+    __tablename__ = "farm_issue_messages"; id = pk()
+    issue_id = Column(Integer, ForeignKey("farm_issues.id"), index=True)
+    sender_id = Column(Integer, ForeignKey("users.id"))
+    message = Column(Text, nullable=False)
+    created_at = now()
