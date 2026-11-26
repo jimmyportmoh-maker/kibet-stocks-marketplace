@@ -20,7 +20,7 @@ with engine.begin() as conn:
     if "county" not in seller_columns:
         conn.execute(text("ALTER TABLE seller_profiles ADD COLUMN county VARCHAR(80) DEFAULT ''"))
 with SessionLocal() as _s: seed(_s)
-app = FastAPI(title="Altrust Flex Stocks")
+app = FastAPI(title="SHESA FIRM ENTERPRISES")
 
 # resource -> (model, roles allowed, writable fields, creatable)
 R = {
